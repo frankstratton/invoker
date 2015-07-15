@@ -101,6 +101,16 @@ module Invoker
           Invoker::Logger.puts "Error killing #{key}"
         end
       end
+
+      sleep 4
+
+      @workers.each do |key, worker|
+        begin
+          Process.kill("KILL", -Process.getpgid(worker.pid))
+        rescue Errno::ESRCH
+          Invoker::Logger.puts "Error killing #{key}"
+        end
+      end
       @workers = {}
     end
 
